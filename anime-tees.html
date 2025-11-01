@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anime Tees - Drippyahhtees</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+  :root {
+    --accent: #ff0055;
+    --accent-alt: #ff3366;
+    --bg: #090909;
+    --card: rgba(255, 255, 255, 0.04);
+    --text-light: #f5f5f5;
+    --text-muted: #a1a1a1;
+    --radius: 18px;
+    --transition: 0.35s ease;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(160deg, var(--bg), #111);
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    background: rgba(10, 10, 10, 0.9);
+    padding: 2rem 1rem;
+    text-align: center;
+    font-size: 2.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    /* Flexbox for hamburger menu and logo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  header h1 {
+    font-size: 1.75rem;
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+    padding: 4rem 2rem;
+    max-width: 1300px;
+    margin: auto;
+  }
+  .product {
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 2rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--transition);
+  }
+  .product:hover { transform: translateY(-12px); box-shadow: 0 0 40px rgba(255, 255, 255, 0.08); }
+  .variant { display: none; width: 100%; }
+  .variant.active { display: block; }
+  .product h3 { font-size: 1.35rem; font-weight: 700; margin-top: 1.2rem; }
+  .product p { font-size: 1rem; margin: 0.4rem 0 1.2rem; color: var(--text-muted); }
+  .order-button {
+    background: linear-gradient(135deg, var(--accent), var(--accent-alt));
+    color: white;
+    padding: 0.75rem 1.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.7px;
+    text-decoration: none;
+    display: inline-block;
+    transition: var(--transition);
+  }
+  .order-button:hover { transform: scale(1.06); box-shadow: 0 0 20px var(--accent); }
+  .toggle-variant {
+    margin: 0.8rem auto;
+    display: inline-block;
+    background: var(--card);
+    color: var(--text-light);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition);
+  }
+  .toggle-variant:hover { background: var(--accent); border-color: var(--accent); }
+  footer {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    font-size: 0.9rem;
+    color: #777;
+    background: #0a0a0a;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    margin-top: 4rem;
+  }
+  
+  #hamburger-icon {
+    display: block;
+    position: absolute;
+    left: 1rem;
+    cursor: pointer;
+    font-size: 2rem;
+    color: white;
+    line-height: 1;
+    z-index: 1001;
+  }
+
+  #mobile-menu {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    max-width: 400px;
+    height: 100vh;
+    background: #151515;
+    z-index: 1000;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.7);
+    transition: left 0.3s ease-in-out;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  #mobile-menu.active {
+    left: 0;
+  }
+
+  #mobile-menu .menu-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .close-btn {
+    font-size: 2rem;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  #mobile-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  #mobile-menu li a {
+    display: block;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background-color var(--transition);
+  }
+
+  #mobile-menu li a:hover {
+    background-color: var(--accent);
+  }
+
+  #mobile-menu .menu-footer {
+    padding: 1.5rem;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  #mobile-menu .menu-footer a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  </style>
+</head>
+<body>
+
+<header>
+  <span id="hamburger-icon">&#9776;</span>
+  <h1>Drippyahhtees</h1>
+</header>
+
+<nav id="mobile-menu">
+  <div class="menu-header">
+    <button class="close-btn">&times;</button>
+  </div>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="music-tees.html">Music Tees</a></li>
+    <li><a href="anime-tees.html">Anime Tees</a></li>
+    <li><a href="track-order.html">Track Order</a></li>
+    <li><a href="contact-us.html">Contact us</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div style="text-align: center; margin-top: 4rem;">
+    <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Anime Tees</h2>
+    <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Tees inspired by your favourite anime</p>
+  </div>
+
+  <section class="product-grid">
+     <div class="product">
+    <a href="the-honored-one.html" target="_blank">
+      <img src="The Honored One black.jpg" class="variant active" alt="The Honored One Tee Black">
+      <img src="The Honored One white.jpg" class="variant" alt="The Honored One Tee White">
+      <h3>The Honored One Tee</h3>
+    </a>
+    <p>
+    <span class="price-inr">
+        <span style="text-decoration: line-through; color: #777; font-size: 0.9em; margin-right: 5px;">₹999</span>
+        ₹699
+        <span style="background-color: #ff0055; color: white; padding: 2px 6px; border-radius: 999px; font-size: 0.7em; margin-left: 5px;">30% OFF</span>
+    </span>
+    <span class="price-usd">
+        <span style="text-decoration: line-through; color: #777; font-size: 0.9em; margin-right: 5px;">$34.99</span>
+        $24.99
+        <span style="background-color: #ff0055; color: white; padding: 2px 6px; border-radius: 999px; font-size: 0.7em; margin-left: 5px;">30% OFF</span>
+    </span>
+</p>
+    <button class="toggle-variant">Switch Color</button>
+    <a href="https://www.instagram.com/drippyahhtees" class="order-button" target="_blank">Order via Instagram DM</a>
+  </div>
+
+  <div class="product">
+    <a href="king-of-curses.html" target="_blank">
+      <img src="King Of Curses black.jpg" class="variant active" alt="King of Curses Tee Black">
+      <img src="King Of Curses white.jpg" class="variant" alt="King of Curses Tee White">
+      <h3>King Of Curses Tee</h3>
+    </a>
+    <p>
+    <span class="price-inr">
+        <span style="text-decoration: line-through; color: #777; font-size: 0.9em; margin-right: 5px;">₹999</span>
+        ₹699
+        <span style="background-color: #ff0055; color: white; padding: 2px 6px; border-radius: 999px; font-size: 0.7em; margin-left: 5px;">30% OFF</span>
+    </span>
+    <span class="price-usd">
+        <span style="text-decoration: line-through; color: #777; font-size: 0.9em; margin-right: 5px;">$34.99</span>
+        $24.99
+        <span style="background-color: #ff0055; color: white; padding: 2px 6px; border-radius: 999px; font-size: 0.7em; margin-left: 5px;">30% OFF</span>
+    </span>
+</p>
+    <button class="toggle-variant">Switch Color</button>
+    <a href="https://www.instagram.com/drippyahhtees" class="order-button" target="_blank">Order via Instagram DM</a>
+  </div>
+    
+  </section>
+</main>
+
+<footer>&copy; 2025 Drippyahhtees. All rights reserved.</footer>
+
+<script>
+  // --- Existing Script ---
+  document.querySelectorAll('.toggle-variant').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const product = this.closest('.product');
+      const images = product.querySelectorAll('.variant');
+      images.forEach(img => img.classList.toggle('active'));
+
+      const blackVisible = images[0].classList.contains('active');
+      this.textContent = blackVisible ? 'Switch to White' : 'Switch to Black';
+    });
+
+    const product = btn.closest('.product');
+    const blackVisible = product.querySelectorAll('.variant')[0].classList.contains('active');
+    btn.textContent = blackVisible ? 'Switch to White' : 'Switch to Black';
+  });
+
+  // --- EXISTING SCRIPT ---
+  async function setPrices() {
+    try {
+      const res = await fetch('https://ipapi.co/json/');
+      const data = await res.json();
+      const isIndia = data.country_code === 'IN';
+
+      document.querySelectorAll('.price-inr').forEach(el => {
+        el.style.display = isIndia ? 'inline' : 'none';
+      });
+
+      document.querySelectorAll('.price-usd').forEach(el => {
+        el.style.display = isIndia ? 'none' : 'inline';
+      });
+    } catch (err) {
+      console.error('GeoIP error:', err);
+      document.querySelectorAll('.price-inr').forEach(el => el.style.display = 'inline');
+      document.querySelectorAll('.price-usd').forEach(el => el.style.display = 'none');
+    }
+  }
+
+  // --- NEW MOBILE MENU SCRIPT ---
+  document.addEventListener('DOMContentLoaded', () => {
+    setPrices(); // Call existing function on load
+
+    const hamburger = document.getElementById('hamburger-icon');
+    const menu = document.getElementById('mobile-menu');
+    const closeBtn = document.querySelector('.close-btn');
+    const menuLinks = menu.querySelectorAll('a');
+
+    // Open menu
+    hamburger.addEventListener('click', () => {
+      menu.classList.add('active');
+    });
+
+    // Close menu
+    closeBtn.addEventListener('click', () => {
+      menu.classList.remove('active');
+    });
+
+    // Close menu when a link is clicked
+    menuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('active');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
